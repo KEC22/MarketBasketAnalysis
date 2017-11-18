@@ -1,0 +1,46 @@
+install.packages("arules")
+install.packages("arulesViz")
+
+library(arules)
+library(arulesViz)
+
+Transactions<- read.transactions("~/Downloads/ElectronidexTransactions.csv",rm.duplicates= TRUE, sep=",",format = "basket")
+
+summary(Transactions)
+inspect(Transactions) 
+inspect(Transactions[1:5])
+length (Transactions) 
+size (Transactions)
+LIST(Transactions)
+itemLabels(Transactions)
+
+itemFrequencyPlot(Transactions, support=0.1)
+itemFrequencyPlot(Transactions, topN=20)
+
+image(Transactions[1:5])
+image(sample(Transactions,10))
+
+rules<- apriori (Transactions, parameter = list(supp = 0.1, conf = 0.8))
+inspect(rules)
+
+rules<- apriori(Transactions, parameter = list( supp= 0.###, conf= 0.##, minlen = #))
+                                                
+summary(rules)
+inspect(rules)
+quality(rules)
+inspect(rules[1:100])
+
+plot(rules <- sort (rules, by="confidence", decreasing=TRUE))
+                                                
+ItemRules <- subset(rules, items %in% "item name")
+inspecg(ItemsRules)
+is.redundant(rules)
+inspect(rules[is.redundant(rules)])
+redundant <- which (colSums(is.subset(rules, rules)) > 1)
+rules <- rules[-redundant]
+
+plot(rules)
+                                                
+plot(ItemRules)
+                                                
+plot(rules[1:20], method="graph", control=list(type="items"))
